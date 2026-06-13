@@ -26,7 +26,6 @@ public class Employee {
     private String Position;
     private String department;
     private Double salary;
-
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate hireDate;}
 

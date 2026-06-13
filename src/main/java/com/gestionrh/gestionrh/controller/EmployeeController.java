@@ -55,12 +55,12 @@ public class EmployeeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Employee> updateAll(@PathVariable Long id,
-                                             @RequestBody Employee Employe){
+                                             @RequestBody Employee employee){
 
         Optional<Employee> emp=empRepository.findById(id);
         if(emp.isPresent()){
             return ResponseEntity.status(HttpStatus.ACCEPTED)
-                    .body(empRepository.save(Employe));
+                    .body(empRepository.save(employee));
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

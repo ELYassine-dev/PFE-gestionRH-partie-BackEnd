@@ -1,7 +1,11 @@
 package com.gestionrh.gestionrh.entities;
 
 public enum Status {
-    Pending,
-    Reject,
-    Done
+    PENDING,
+    REJECTED,
+    ABSENT,
+    JUSTIFIED,
+    UNJUSTIFIED,
+    APPROVED
+
 }

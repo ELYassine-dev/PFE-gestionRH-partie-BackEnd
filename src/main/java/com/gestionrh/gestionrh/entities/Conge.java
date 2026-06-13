@@ -20,7 +20,8 @@ public class Conge {
     private Long id;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     private LocalDate createAt;
     private String reason;
 
