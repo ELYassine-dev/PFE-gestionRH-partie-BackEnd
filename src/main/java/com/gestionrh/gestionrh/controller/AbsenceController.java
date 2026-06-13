@@ -2,9 +2,11 @@ package com.gestionrh.gestionrh.controller;
 
 import com.gestionrh.gestionrh.entities.Absence;
 import com.gestionrh.gestionrh.entities.Employee;
+import com.gestionrh.gestionrh.entities.Notification;
 import com.gestionrh.gestionrh.entities.Status;
 import com.gestionrh.gestionrh.repository.AbsenceRepository;
 import com.gestionrh.gestionrh.repository.EmployeRepository;
+import com.gestionrh.gestionrh.service.NotificationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class AbsenceController {
     private AbsenceRepository absenceRepository;
     private EmployeRepository employeRepository;
+    private NotificationService notificationService;
 
 
     @GetMapping
@@ -38,7 +41,10 @@ public class AbsenceController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
                     }else{
             absence.setStatus(Status.ABSENT);
-            return ResponseEntity.ok(absenceRepository.save(absence));
+            Absence a1=absenceRepository.save(absence);
+            notificationService.sendNotification(absence.getEmployee(),
+                    "Une absence a été enregistrée"  );
+            return ResponseEntity.ok(a1);
         }
     }
 
@@ -56,13 +62,19 @@ public class AbsenceController {
     public Absence absenceJustify(@PathVariable Long id){
         Absence absence1=absenceRepository.findById(id).orElseThrow();
         absence1.setStatus(Status.JUSTIFIED);
-        return absenceRepository.save(absence1);
+        Absence a1=absenceRepository.save(absence1);
+        notificationService.sendNotification(absence1.getEmployee(),
+                "Votre absence a été justifiée"  );
+        return a1;
     }
     @PutMapping("/{id}/reject")
     public Absence absenceReject(@PathVariable Long id){
         Absence absence1=absenceRepository.findById(id).orElseThrow();
         absence1.setStatus(Status.UNJUSTIFIED);
-        return absenceRepository.save(absence1);
+        Absence a1=absenceRepository.save(absence1);
+        notificationService.sendNotification(absence1.getEmployee(),
+                "La justification de votre absence a été refusée"  );
+        return a1;
     }
 
 

@@ -1,4 +1,8 @@
 package com.gestionrh.gestionrh.security.repository;
 
-public interface RoleRepository {
+import com.gestionrh.gestionrh.security.entities.Role;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface RoleRepository extends JpaRepository<Role,Long> {
+    Role findByRole(String role);
 }

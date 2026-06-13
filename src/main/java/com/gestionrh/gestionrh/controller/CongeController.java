@@ -6,6 +6,7 @@ import com.gestionrh.gestionrh.entities.Employee;
 import com.gestionrh.gestionrh.entities.Status;
 import com.gestionrh.gestionrh.repository.CongeRepository;
 import com.gestionrh.gestionrh.repository.EmployeRepository;
+import com.gestionrh.gestionrh.service.NotificationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,19 +22,23 @@ import java.util.Optional;
 public class CongeController {
     private  CongeRepository congeRepository;
     private EmployeRepository employeRepository;
+    private NotificationService notificationService;
 
 
     @PostMapping
-    public ResponseEntity<Conge> create(@RequestBody Conge conge) {
+    public ResponseEntity<Conge> createConge(@RequestBody Conge conge) {
         Optional<Employee> emp=employeRepository.findById(conge.getEmployee().getId());
         if(emp.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }else {
             conge.setStatus(Status.PENDING);
             conge.setCreateAt(LocalDate.now());
-            return ResponseEntity.ok(congeRepository.save(conge));
-        }
+                Conge saved =congeRepository.save(conge);
+            notificationService.sendNotification(conge.getEmployee(),
+                    "votre demande de conge est envoye" );
+            return ResponseEntity.ok(saved);
     }
+}
 
     @GetMapping
     public ResponseEntity<List<Conge>> getAllConge(){
@@ -50,18 +55,30 @@ public List<Conge> getEmployeeConges(@PathVariable Long id){
     return congeRepository.findByEmployeeId(id);
 }
 
+
+
 @PutMapping("/{id}/approve")
     public Conge approve(@PathVariable Long id){
         Conge conge=congeRepository.findById(id).orElseThrow();
         conge.setStatus(Status.APPROVED);
-        return congeRepository.save(conge);
+        Conge saved= congeRepository.save(conge);
+    notificationService.sendNotification(
+            conge.getEmployee(),
+            "Votre demande de congé a été approuvée"
+    );
+    return saved;
 }
 
     @PutMapping("/{id}/reject")
     public Conge reject(@PathVariable Long id){
         Conge conge=congeRepository.findById(id).orElseThrow();
         conge.setStatus(Status.REJECTED);
-        return congeRepository.save(conge);
+        Conge saved= congeRepository.save(conge);
+        notificationService.sendNotification(
+                conge.getEmployee(),
+                "Votre demande de congé a été refusée."
+        );
+        return saved;
     }
 
 
