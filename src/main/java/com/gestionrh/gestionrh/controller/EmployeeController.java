@@ -3,6 +3,8 @@ package com.gestionrh.gestionrh.controller;
 import com.gestionrh.gestionrh.entities.Employee;
 import com.gestionrh.gestionrh.repository.EmployeRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,18 +17,17 @@ import java.util.Optional;
 @RequestMapping("/employees")
 @Transactional
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class EmployeeController {
 
     private EmployeRepository empRepository;
 
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getEmployees() {
-        List<Employee> emp=empRepository.findAll();
-        if(emp==null){
-            return ResponseEntity.noContent().build();
-        }else
-            return ResponseEntity.ok().body(emp);
+    public Page<Employee> getEmployees(
+            @RequestParam(name ="page" ,defaultValue = "0") int page,
+            @RequestParam(name="size",defaultValue = "10")int size) {
+        return empRepository.findAll(PageRequest.of(page, size));
     }
 
     @GetMapping("/{id}")
@@ -53,21 +54,40 @@ public class EmployeeController {
                   empRepository.deleteById(id);
     }
 
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Employee> updateAll(@PathVariable Long id,
+//                                             @RequestBody Employee employee){
+//
+//        Optional<Employee> emp=empRepository.findById(id);
+//        if(emp.isPresent()){
+//            return ResponseEntity.status(HttpStatus.ACCEPTED)
+//                    .body(empRepository.save(employee));
+//        }else{
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
+//    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Employee> updateAll(@PathVariable Long id,
-                                             @RequestBody Employee employee){
+                                              @RequestBody Employee employee) {
 
-        Optional<Employee> emp=empRepository.findById(id);
-        if(emp.isPresent()){
-            return ResponseEntity.status(HttpStatus.ACCEPTED)
-                    .body(empRepository.save(employee));
-        }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return empRepository.findById(id)
+                .map(emp -> {
+                    emp.setFirstName(employee.getFirstName());
+                    emp.setLastName(employee.getLastName());
+                    emp.setEmail(employee.getEmail());
+                    emp.setPhone(employee.getPhone());
+                    emp.setDepartment(employee.getDepartment());
+                    emp.setPosition(employee.getPosition());
+                    emp.setSalary(employee.getSalary());
+                    emp.setHireDate(employee.getHireDate());
 
+                    Employee updated = empRepository.save(emp);
+
+                    return ResponseEntity.ok(updated);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
-
-
 
     @PatchMapping("/{id}")
     public ResponseEntity<Employee> updateOne(@PathVariable Long id,

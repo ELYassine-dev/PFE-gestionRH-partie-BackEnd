@@ -19,6 +19,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/absences")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
+
 public class AbsenceController {
     private AbsenceRepository absenceRepository;
     private EmployeRepository employeRepository;
@@ -58,7 +60,7 @@ public class AbsenceController {
         }
 
     }
-    @PutMapping("/{id}/justify")
+    @PutMapping("/{id}/justifier")
     public Absence absenceJustify(@PathVariable Long id){
         Absence absence1=absenceRepository.findById(id).orElseThrow();
         absence1.setStatus(Status.JUSTIFIED);
@@ -67,7 +69,7 @@ public class AbsenceController {
                 "Votre absence a été justifiée"  );
         return a1;
     }
-    @PutMapping("/{id}/reject")
+    @PutMapping("/{id}/unjustifier")
     public Absence absenceReject(@PathVariable Long id){
         Absence absence1=absenceRepository.findById(id).orElseThrow();
         absence1.setStatus(Status.UNJUSTIFIED);

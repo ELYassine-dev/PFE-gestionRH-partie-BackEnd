@@ -24,7 +24,7 @@ public class Employee {
     private String lastName;
     private String phone;
     private String email;
-    private String Position;
+    private String position;
     private String department;
     private Double salary;
     @JsonFormat(pattern = "yyyy-MM-dd")

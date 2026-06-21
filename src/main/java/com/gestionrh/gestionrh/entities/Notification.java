@@ -20,6 +20,7 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String message;
+    @Column(name = "is_read")
     private  boolean isRead=false;
     private LocalDateTime createAt = LocalDateTime.now();
     @ManyToOne

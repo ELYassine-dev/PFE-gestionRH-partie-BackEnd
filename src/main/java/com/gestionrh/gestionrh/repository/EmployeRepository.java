@@ -18,4 +18,6 @@ public interface EmployeRepository extends JpaRepository<Employee, Long> {
         List<Employee> searchByFullName(@Param("keyword") String keyword);
 
 //        List<Employee> findByFirstNameContainingIgnoreCase(String keyword);
+
+//        List<Employee> findAllByOrderByIdAsc();
 }

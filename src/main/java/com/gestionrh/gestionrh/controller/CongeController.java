@@ -19,6 +19,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/conges")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class CongeController {
     private  CongeRepository congeRepository;
     private EmployeRepository employeRepository;
@@ -57,7 +58,7 @@ public List<Conge> getEmployeeConges(@PathVariable Long id){
 
 
 
-@PutMapping("/{id}/approve")
+@PutMapping("/{id}/approver")
     public Conge approve(@PathVariable Long id){
         Conge conge=congeRepository.findById(id).orElseThrow();
         conge.setStatus(Status.APPROVED);
@@ -69,7 +70,7 @@ public List<Conge> getEmployeeConges(@PathVariable Long id){
     return saved;
 }
 
-    @PutMapping("/{id}/reject")
+    @PutMapping("/{id}/refuser")
     public Conge reject(@PathVariable Long id){
         Conge conge=congeRepository.findById(id).orElseThrow();
         conge.setStatus(Status.REJECTED);
