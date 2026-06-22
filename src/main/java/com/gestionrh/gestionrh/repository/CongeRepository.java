@@ -9,4 +9,5 @@ import java.util.List;
 public interface CongeRepository extends JpaRepository<Conge,Long> {
     List<Conge> findByEmployeeId(Long id);
     List<Conge> findByStatus(Status status);
+    void deleteByEmployeeId(Long id);
 }

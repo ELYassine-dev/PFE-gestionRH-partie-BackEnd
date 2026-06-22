@@ -1,7 +1,10 @@
 package com.gestionrh.gestionrh.controller;
 
 import com.gestionrh.gestionrh.entities.Employee;
+import com.gestionrh.gestionrh.repository.AbsenceRepository;
+import com.gestionrh.gestionrh.repository.CongeRepository;
 import com.gestionrh.gestionrh.repository.EmployeRepository;
+import com.gestionrh.gestionrh.repository.NotificationRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +24,9 @@ import java.util.Optional;
 public class EmployeeController {
 
     private EmployeRepository empRepository;
+    private CongeRepository congeRepository;
+    private NotificationRepository notificationRepository;
+    private AbsenceRepository absRepository;
 
 
     @GetMapping
@@ -49,9 +55,14 @@ public class EmployeeController {
         }
     }
 
+    @Transactional
     @DeleteMapping("{id}")
     public void deleteEmployeeById(@PathVariable Long id) {
-                  empRepository.deleteById(id);
+        congeRepository.deleteByEmployeeId(id);
+        notificationRepository.deleteByEmployeeId(id);
+        absRepository.deleteByEmployeeId(id);
+        empRepository.deleteById(id);
+
     }
 
 //    @PutMapping("/{id}")

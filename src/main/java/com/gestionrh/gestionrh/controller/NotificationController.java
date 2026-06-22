@@ -5,6 +5,8 @@ import com.gestionrh.gestionrh.repository.EmployeRepository;
 import com.gestionrh.gestionrh.repository.NotificationRepository;
 import lombok.AllArgsConstructor;
 import org.hibernate.internal.build.AllowNonPortable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,12 +23,15 @@ public class NotificationController {
 
 
     @GetMapping
-    public List<Notification> getAllNotifications() {
-        return notificationRepository.findAll();
+    public Page<Notification> getAllNotifications( @RequestParam(name="page",defaultValue = "0") int page,
+                                                   @RequestParam(name="size",defaultValue = "10") int size
+    ) {
+        return notificationRepository.findAll(PageRequest.of(page,size));
     }
 
     @GetMapping("/employee/{id}")
-    public List<Notification> getByEmployee(@PathVariable Long id) {
+    public List<Notification> getByEmployee(@PathVariable Long id
+                                             ) {
         return notificationRepository.findByEmployeeId(id);
     }
 
