@@ -38,9 +38,33 @@ public class Employee {
     @NotNull(message = "Price cannot be null")
     @Positive(message = "Price must be positive")
     private Double salary;
-    @NotBlank(message="hire date should not be null")
+    @NotNull(message = "La date d'embauche est obligatoire")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate hireDate;}
+    private LocalDate hireDate;
+    @NotBlank(message="cin should not be null")
+    private String cin;
+    @NotBlank(message="adresse should not be null")
+    private String adresse;
+    @NotNull(message="age should not be null")
+    private Integer age;
+    @NotBlank(message="diplome should not be null")
+    private String diplome;
+    @NotBlank(message="gender should not be null")
+    private String gender;
+    @NotBlank(message="situation familiar should not be null")
+    private String situationfamiliar;
+    @NotNull(message="experience should not be null")
+    private Integer experience;
+
+
+
+
+
+
+
+
+
+}
 
 //Optional
 //   @OneToMany(mappedBy = "employee")

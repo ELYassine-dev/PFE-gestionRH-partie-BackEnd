@@ -8,6 +8,7 @@ import com.gestionrh.gestionrh.repository.AbsenceRepository;
 import com.gestionrh.gestionrh.repository.EmployeRepository;
 import com.gestionrh.gestionrh.service.NotificationService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class AbsenceController {
 
     @GetMapping
     public ResponseEntity<List<Absence>> getAllAbsences(){
-        List<Absence> absences = absenceRepository.findAll();
+        List<Absence> absences = absenceRepository.findAll( Sort.by("id").descending());
         if(absences.isEmpty()){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(absences);
         }else {

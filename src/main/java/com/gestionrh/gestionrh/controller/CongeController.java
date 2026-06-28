@@ -8,6 +8,7 @@ import com.gestionrh.gestionrh.repository.CongeRepository;
 import com.gestionrh.gestionrh.repository.EmployeRepository;
 import com.gestionrh.gestionrh.service.NotificationService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +44,7 @@ public class CongeController {
 
     @GetMapping
     public ResponseEntity<List<Conge>> getAllConge(){
-        return ResponseEntity.ok(congeRepository.findAll());
+        return ResponseEntity.ok(congeRepository.findAll( Sort.by("id").descending()));
     }
 
 

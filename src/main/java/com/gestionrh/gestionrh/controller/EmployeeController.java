@@ -8,6 +8,7 @@ import com.gestionrh.gestionrh.repository.NotificationRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +34,7 @@ public class EmployeeController {
     public Page<Employee> getEmployees(
             @RequestParam(name ="page" ,defaultValue = "0") int page,
             @RequestParam(name="size",defaultValue = "10")int size) {
-        return empRepository.findAll(PageRequest.of(page, size));
+        return empRepository.findAll(PageRequest.of(page, size, Sort.by("id").ascending()));
     }
 
     @GetMapping("/{id}")
@@ -92,6 +93,13 @@ public class EmployeeController {
                     emp.setPosition(employee.getPosition());
                     emp.setSalary(employee.getSalary());
                     emp.setHireDate(employee.getHireDate());
+                    emp.setCin(employee.getCin());
+                    emp.setAdresse(employee.getAdresse());
+                    emp.setAge(employee.getAge());
+                    emp.setDiplome(employee.getDiplome());
+                    emp.setGender(employee.getGender());
+                    emp.setSituationfamiliar(employee.getSituationfamiliar());
+                    emp.setExperience(employee.getExperience());
 
                     Employee updated = empRepository.save(emp);
 
@@ -129,6 +137,30 @@ public class EmployeeController {
             if(employee.getHireDate()!=null){
                 emp.setHireDate(employee.getHireDate());
             }
+            if(employee.getCin()!=null){
+                emp.setCin(employee.getCin());
+            }
+            if(employee.getAdresse()!=null){
+                emp.setAdresse(employee.getAdresse());
+            }
+            if(employee.getAge()!=0){
+                emp.setAge(employee.getAge());
+            }
+            if(employee.getDiplome()!=null){
+                emp.setDiplome(employee.getDiplome());
+            }
+            if(employee.getGender()!=null){
+                emp.setGender(employee.getGender());
+            }
+            if(employee.getSituationfamiliar()!=null){
+                emp.setSituationfamiliar(employee.getSituationfamiliar());
+            }
+            if(employee.getExperience()!=0){
+                emp.setExperience(employee.getExperience());
+            }
+
+
+
             return ResponseEntity.status(HttpStatus.ACCEPTED)
                     .body(empRepository.save(emp));
         }else{
@@ -146,6 +178,17 @@ public class EmployeeController {
         }
 
  }
+
+//  --------------------liste des employes sans paggination
+
+
+    @GetMapping("/all")
+    public List<Employee> getAllEmp(){
+        return empRepository.findAll();
+    }
+
+
+
 
 
 
